@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Alice Chen",
+    "label": "fraud",
+    "profile_claims": {
+      "years_experience": 6,
+      "tools": ["LangChain", "pgvector", "Docker", "n8n"],
+      "timeline_anomaly": 0.92,
+      "title_inflation": 0.85,
+      "web_signals": {
+        "github_activity": 0.10,
+        "public_presence": 0.05,
+        "temporal_coherence": 0.20
+      }
+    },
+    "responses": {
+      "rag": "RAG is important because it combines retrieval with generation and follows best practices for high quality answers.",
+      "infra": "I usually use scalable cloud infrastructure, monitoring, and clean deployment processes.",
+      "automation": "Automation is useful to reduce manual work and improve operational efficiency across teams."
+    }
+  },
+  {
+    "name": "Marcus Webb",
+    "label": "fraud",
+    "profile_claims": {
+      "years_experience": 5,
+      "tools": ["LangChain", "Supabase", "Kubernetes", "Docker"],
+      "timeline_anomaly": 0.81,
+      "title_inflation": 0.78,
+      "web_signals": {
+        "github_activity": 0.18,
+        "public_presence": 0.10,
+        "temporal_coherence": 0.30
+      }
+    },
+    "responses": {
+      "rag": "I build robust RAG systems with embeddings, vector databases, and best-practice prompt engineering.",
+      "infra": "I deploy distributed systems with containers, logging, and strong observability patterns.",
+      "automation": "I create workflow automations that streamline processes and ensure operational excellence."
+    }
+  },
+  {
+    "name": "Priya Nair",
+    "label": "legit",
+    "profile_claims": {
+      "years_experience": 5,
+      "tools": ["LangChain", "pgvector", "PostgreSQL", "Docker"],
+      "timeline_anomaly": 0.12,
+      "title_inflation": 0.10,
+      "web_signals": {
+        "github_activity": 0.82,
+        "public_presence": 0.55,
+        "temporal_coherence": 0.90
+      }
+    },
+    "responses": {
+      "rag": "Our first failure was retrieval recall. We had chunking that was too coarse, then reranking added latency. We tuned top-k and changed metadata filters after seeing hallucinations on narrow queries.",
+      "infra": "A pgvector index rebuild locked writes longer than expected, so we moved the rollout window and added better timeout controls around the migration path.",
+      "automation": "In n8n the hardest issue was dedup plus retry. A webhook replay created duplicate rows, so I added idempotency keys and queue-aware retry logic."
+    }
+  },
+  {
+    "name": "Daniel Souza",
+    "label": "legit",
+    "profile_claims": {
+      "years_experience": 4,
+      "tools": ["n8n", "Supabase", "Docker", "PostgreSQL"],
+      "timeline_anomaly": 0.18,
+      "title_inflation": 0.15,
+      "web_signals": {
+        "github_activity": 0.70,
+        "public_presence": 0.40,
+        "temporal_coherence": 0.88
+      }
+    },
+    "responses": {
+      "rag": "I used retrieval mostly for internal docs. The tricky part was threshold tuning because low-quality chunks looked relevant but hurt answer precision.",
+      "infra": "The production bottleneck was container memory pressure during OCR jobs. We split workloads and improved queue handling instead of just scaling blindly.",
+      "automation": "A workflow broke because of race conditions between API callbacks and DB writes. I fixed it with clearer event ordering and dedup checks."
+    }
+  },
+  {
+    "name": "Sarah Kim",
+    "label": "gray",
+    "profile_claims": {
+      "years_experience": 4,
+      "tools": ["LangChain", "Docker", "Supabase"],
+      "timeline_anomaly": 0.58,
+      "title_inflation": 0.45,
+      "web_signals": {
+        "github_activity": 0.35,
+        "public_presence": 0.25,
+        "temporal_coherence": 0.55
+      }
+    },
+    "responses": {
+      "rag": "I improved retrieval and prompt quality, though I do not remember every threshold we used. We had some latency trade-offs.",
+      "infra": "I worked with containers and monitoring, and there were some timeout issues during heavier workloads.",
+      "automation": "I used automations and webhooks to reduce manual work, but I was not always the main owner of the workflow logic."
+    }
+  },
+  {
+    "name": "Joao Ferreira",
+    "label": "gray",
+    "profile_claims": {
+      "years_experience": 3,
+      "tools": ["Docker", "PostgreSQL", "n8n"],
+      "timeline_anomaly": 0.28,
+      "title_inflation": 0.20,
+      "web_signals": {
+        "github_activity": 0.45,
+        "public_presence": 0.18,
+        "temporal_coherence": 0.62
+      }
+    },
+    "responses": {
+      "rag": "I know the general architecture but my direct work was more on integration than model behavior.",
+      "infra": "I can explain deployments at a high level, but deeper bottlenecks were usually handled with support from the broader team.",
+      "automation": "I built working automations, though some of the harder retry and concurrency logic was collaborative."
+    }
+  }
+]
