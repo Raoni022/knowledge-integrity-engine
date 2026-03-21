@@ -78,75 +78,75 @@ fraud_score = (
     - 0.10 * scar
     - 0.15 * consistency
 )
-```
-Interpretation:
+``` 
+## Interpretation
 
-High score → strong indicators of fabricated expertise
-Low score → consistent with real-world experience
+ * High score → strong indicators of fabricated expertise
+ * Low score → consistent with real-world experience
 
 This separation avoids signal cancellation by explicitly distinguishing:
 
-suspicion signals
-credibility signals
-Action Space
+ * suspicion signals
+ * credibility signals
+## Action Space
 
 The system does not immediately classify candidates.
 
 It decides how to investigate them.
 
-Available Actions
-Ask deeper questions:
-RAG systems
-Infrastructure
-Automation workflows
-Investigate signals:
-Profile consistency
-External validation (web signals)
-Final Decisions
-FLAG → high-confidence fraud
-PASS → high-confidence legitimate
-ESCALATE → ambiguous case requiring human review
-Key Design Decision
+## Available Actions
+ * Ask deeper questions:
+   * RAG systems
+   * Infrastructure
+   * Automation workflows
+ * Investigate signals:
+   * Profile consistency
+   * External validation (web signals)
+   * 
+## Final Decisions
+ * FLAG → high-confidence fraud
+ * PASS → high-confidence legitimate
+ * ESCALATE → ambiguous case
+ * 
+## Key Design Decision
 
 Reinforcement Learning is used for:
 
 Question strategy optimization — not final classification.
 
-Why?
-
 Because expertise is revealed through interaction, not single answers.
 
 This design:
 
-mimics real technical interviews
-avoids black-box classification
-prioritizes interpretability
-Current Implementation
+ * mimics real technical interviews
+ * avoids black-box classification
+ * prioritizes interpretability
+ * 
+## Current Implementation
 
 This repository includes:
 
-Custom Gymnasium environment
-Heuristic baseline agent (calibrated)
-Synthetic dataset (fraud / legit / gray cases)
-Unit tests for scoring components
-
-The environment is fully compatible with DQN, but the baseline is intentionally heuristic for clarity and control.
-
-Demo Result
+ * Custom Gymnasium environment
+ * Heuristic baseline agent (calibrated)
+ * Synthetic dataset (fraud / legit / gray cases)
+ * Unit tests for scoring components
+   
+## Demo Result
+```
 fraud → FLAG
 gray  → ESCALATE
 legit → PASS
+```
 
-This demonstrates correct behavioral separation between:
-
-clear fraud
-legitimate candidates
-uncertain cases
-How to Run
+## How to Run
+```
 pip install -r requirements.txt
 python run_demo.py
 pytest -q
-Project Structure
+```
+
+## Project Structure
+```
 src/kie/
   agent.py
   environment.py
@@ -154,24 +154,24 @@ src/kie/
   profile_delta.py
   web_signals.py
   question_bank.py
-
 tests/
 run_demo.py
-Limitations
-Uses synthetic data (no real-world scraping)
-Heuristic agent (no trained RL policy yet)
-Web signals are simulated
+```
 
-These are intentional trade-offs to:
+## Limitations
 
-keep the system interpretable
-focus on signal quality over scale
-Future Work
-DQN-based policy learning
-Real web signal integration (GitHub, StackOverflow)
-Multi-modal analysis (video/audio interviews)
-Adaptive questioning strategies
-Author
+ * Uses synthetic data
+ * Heuristic agent (no trained RL policy yet)
+ * Web signals are simulated
+
+## Future Work
+
+ * DQN-based policy learning
+ * Real web signal integration
+ * Multi-modal analysis
+ * Adaptive questioning strategies
+
+## Author
 
 Raoni Medeiros
 AI Automation & Systems Engineer
