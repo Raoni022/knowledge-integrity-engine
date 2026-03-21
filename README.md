@@ -125,7 +125,7 @@ This design:
  * mimics real technical interviews
  * avoids black-box classification
  * prioritizes interpretability
- * 
+   
 ## Current Implementation
 
 This repository includes:
