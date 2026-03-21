@@ -1,23 +1,31 @@
 from __future__ import annotations
 
 import json
+import random
 from pathlib import Path
 from typing import Dict, List
 
 import numpy as np
+import torch
 
-from src.kie.training_env import ExpertEnv
+from src.kie.environment import KnowledgeIntegrityEnv
 from src.kie.dqn_agent import DQNAgent
 
 
 OUTPUT_DIR = Path("artifacts")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
+SEED = 42
+
 
 def run_training(episodes: int = 200, target_update_interval: int = 10) -> Dict[str, List[float]]:
-    env = ExpertEnv()
-    state_dim = 10
-    action_dim = 11
+    random.seed(SEED)
+    np.random.seed(SEED)
+    torch.manual_seed(SEED)
+
+    env = KnowledgeIntegrityEnv()
+    state_dim = env.observation_space.shape[0]
+    action_dim = env.action_space.n
 
     agent = DQNAgent(state_dim=state_dim, action_dim=action_dim)
 
@@ -25,14 +33,15 @@ def run_training(episodes: int = 200, target_update_interval: int = 10) -> Dict[
     losses: List[float] = []
 
     for ep in range(episodes):
-        state = env.reset()
+        state, _ = env.reset(seed=SEED + ep)
         done = False
         total_reward = 0.0
         episode_losses: List[float] = []
 
         while not done:
             action = agent.act(state)
-            next_state, reward, done, _ = env.step(action)
+            next_state, reward, terminated, truncated, _ = env.step(action)
+            done = terminated or truncated
 
             agent.remember(state, action, reward, next_state, done)
             loss = agent.update()
@@ -43,7 +52,8 @@ def run_training(episodes: int = 200, target_update_interval: int = 10) -> Dict[
             total_reward += float(reward)
 
         agent.decay_epsilon()
-        if ep % target_update_interval == 0:
+
+        if (ep + 1) % target_update_interval == 0:
             agent.update_target()
 
         rewards.append(total_reward)
@@ -51,7 +61,17 @@ def run_training(episodes: int = 200, target_update_interval: int = 10) -> Dict[
 
         print(f"Episode {ep:03d} | reward={total_reward:.3f} | epsilon={agent.epsilon:.3f}")
 
-    metrics = {"rewards": rewards, "losses": losses}
+    torch.save(agent.q_net.state_dict(), OUTPUT_DIR / "dqn_q_net.pth")
+    torch.save(agent.target_net.state_dict(), OUTPUT_DIR / "dqn_target_net.pth")
+
+    metrics = {
+        "episodes": episodes,
+        "target_update_interval": target_update_interval,
+        "seed": SEED,
+        "final_epsilon": agent.epsilon,
+        "rewards": rewards,
+        "losses": losses,
+    }
     (OUTPUT_DIR / "training_metrics.json").write_text(json.dumps(metrics, indent=2))
 
     try:
