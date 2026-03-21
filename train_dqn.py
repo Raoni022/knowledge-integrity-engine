@@ -1,12 +1,11 @@
-from __future__ import annotations
-
 import json
 from pathlib import Path
 from typing import Dict, List
 
 import numpy as np
+import torch
 
-from src.kie.environment import ExpertEnv
+from src.kie.environment import KnowledgeIntegrityEnv
 from src.kie.dqn_agent import DQNAgent
 
 
@@ -15,7 +14,7 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 
 
 def run_training(episodes: int = 200, target_update_interval: int = 10) -> Dict[str, List[float]]:
-    env = ExpertEnv()
+    env = KnowledgeIntegrityEnv()
     state_dim = 10
     action_dim = 11
 
@@ -25,14 +24,15 @@ def run_training(episodes: int = 200, target_update_interval: int = 10) -> Dict[
     losses: List[float] = []
 
     for ep in range(episodes):
-        state = env.reset()
+        state, _ = env.reset()
         done = False
         total_reward = 0.0
         episode_losses: List[float] = []
 
         while not done:
             action = agent.act(state)
-            next_state, reward, done, _ = env.step(action)
+            next_state, reward, terminated, truncated, _ = env.step(action)
+            done = terminated or truncated
 
             agent.remember(state, action, reward, next_state, done)
             loss = agent.update()
@@ -54,20 +54,8 @@ def run_training(episodes: int = 200, target_update_interval: int = 10) -> Dict[
     metrics = {"rewards": rewards, "losses": losses}
     (OUTPUT_DIR / "training_metrics.json").write_text(json.dumps(metrics, indent=2))
 
-    # Optional plot (only if matplotlib is available)
-    try:
-        import matplotlib.pyplot as plt  # type: ignore
-
-        plt.figure()
-        plt.plot(rewards)
-        plt.title("Training Reward")
-        plt.xlabel("Episode")
-        plt.ylabel("Reward")
-        plt.tight_layout()
-        plt.savefig(OUTPUT_DIR / "training_curve.png")
-        plt.close()
-    except Exception:
-        pass
+    torch.save(agent.q_net.state_dict(), OUTPUT_DIR / "dqn_q_net.pth")
+    torch.save(agent.target_net.state_dict(), OUTPUT_DIR / "dqn_target_net.pth")
 
     return metrics
 

@@ -1,0 +1,314 @@
+{
+  "heuristic": {
+    "mode": "heuristic",
+    "episodes": 300,
+    "avg_reward": 1.8316,
+    "legit_pass_rate": 0.4466,
+    "fraud_flag_rate": 1.0,
+    "gray_investigate_rate": 1.0,
+    "decision_counts": {
+      "fraud->FLAG": 89,
+      "gray->ESCALATE": 108,
+      "legit->ESCALATE": 57,
+      "legit->PASS": 46
+    },
+    "sample_outcomes": [
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.1761000007390976,
+        "reward": 1.9294
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.04
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.1761000007390976,
+        "reward": 1.9294
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.22294999659061432,
+        "reward": 2.0133
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.22294999659061432,
+        "reward": 2.0133
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.22294999659061432,
+        "reward": 2.0133
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.04
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.1761000007390976,
+        "reward": 1.9294
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.22294999659061432,
+        "reward": 2.0133
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.04
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.22294999659061432,
+        "reward": 2.0133
+      },
+      {
+        "candidate": "Alice Chen",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6660500168800354,
+        "reward": 2.614
+      },
+      {
+        "candidate": "Daniel Souza",
+        "label": "legit",
+        "decision": "ESCALATE",
+        "avg_score": 0.0848499983549118,
+        "reward": 0.1129
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.1761000007390976,
+        "reward": 1.9294
+      },
+      {
+        "candidate": "Alice Chen",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6660500168800354,
+        "reward": 2.614
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.1761000007390976,
+        "reward": 1.9294
+      },
+      {
+        "candidate": "Daniel Souza",
+        "label": "legit",
+        "decision": "ESCALATE",
+        "avg_score": 0.0848499983549118,
+        "reward": 0.1129
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.22294999659061432,
+        "reward": 2.0133
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.1761000007390976,
+        "reward": 1.9294
+      },
+      {
+        "candidate": "Daniel Souza",
+        "label": "legit",
+        "decision": "ESCALATE",
+        "avg_score": 0.0848499983549118,
+        "reward": 0.1129
+      }
+    ]
+  },
+  "dqn": {
+    "mode": "dqn",
+    "episodes": 300,
+    "avg_reward": 2.2748,
+    "legit_pass_rate": 1.0,
+    "fraud_flag_rate": 1.0,
+    "gray_investigate_rate": 1.0,
+    "decision_counts": {
+      "fraud->FLAG": 89,
+      "gray->ASK_DEEP_RAG": 54,
+      "gray->CHECK_WEB": 54,
+      "legit->PASS": 103
+    },
+    "sample_outcomes": [
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ASK_DEEP_RAG",
+        "avg_score": 0.16110000014305115,
+        "reward": 1.7881
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.04
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ASK_DEEP_RAG",
+        "avg_score": 0.16110000014305115,
+        "reward": 1.7881
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "CHECK_WEB",
+        "avg_score": 0.24295000731945038,
+        "reward": 1.9825
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "CHECK_WEB",
+        "avg_score": 0.24295000731945038,
+        "reward": 1.9825
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "CHECK_WEB",
+        "avg_score": 0.24295000731945038,
+        "reward": 1.9825
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.04
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ASK_DEEP_RAG",
+        "avg_score": 0.16110000014305115,
+        "reward": 1.7881
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "CHECK_WEB",
+        "avg_score": 0.24295000731945038,
+        "reward": 1.9825
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.04
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "CHECK_WEB",
+        "avg_score": 0.24295000731945038,
+        "reward": 1.9825
+      },
+      {
+        "candidate": "Alice Chen",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6660500168800354,
+        "reward": 2.921
+      },
+      {
+        "candidate": "Daniel Souza",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0848499983549118,
+        "reward": 2.1129
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ASK_DEEP_RAG",
+        "avg_score": 0.16110000014305115,
+        "reward": 1.7881
+      },
+      {
+        "candidate": "Alice Chen",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6660500168800354,
+        "reward": 2.921
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ASK_DEEP_RAG",
+        "avg_score": 0.16110000014305115,
+        "reward": 1.7881
+      },
+      {
+        "candidate": "Daniel Souza",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0848499983549118,
+        "reward": 2.1129
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "CHECK_WEB",
+        "avg_score": 0.24295000731945038,
+        "reward": 1.9825
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ASK_DEEP_RAG",
+        "avg_score": 0.16110000014305115,
+        "reward": 1.7881
+      },
+      {
+        "candidate": "Daniel Souza",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0848499983549118,
+        "reward": 2.1129
+      }
+    ]
+  }
+}
