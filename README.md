@@ -78,7 +78,7 @@ fraud_score = (
     - 0.10 * scar
     - 0.15 * consistency
 )
-
+```
 Interpretation:
 
 High score → strong indicators of fabricated expertise
