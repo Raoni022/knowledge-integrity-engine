@@ -69,7 +69,8 @@ Each step encodes:
 
 ## Fraud Score (Key Signal)
 
-```python
+```
+python
 fraud_score = (
     0.30 * profile_delta
     + 0.25 * genericity
@@ -88,6 +89,7 @@ This separation avoids signal cancellation by explicitly distinguishing:
 
  * suspicion signals
  * credibility signals
+   
 ## Action Space
 
 The system does not immediately classify candidates.
@@ -95,24 +97,25 @@ The system does not immediately classify candidates.
 It decides how to investigate them.
 
 ## Available Actions
- * Ask deeper questions:
-   * RAG systems
-   * Infrastructure
-   * Automation workflows
- * Investigate signals:
-   * Profile consistency
-   * External validation (web signals)
-   * 
+ 
+  - Ask deeper questions:
+   - RAG systems
+   - Infrastructure
+   - Automation workflows
+ - Investigate signals:
+   - Profile consistency
+   - External validation (web signals)
+    
 ## Final Decisions
  * FLAG → high-confidence fraud
  * PASS → high-confidence legitimate
  * ESCALATE → ambiguous case
- * 
+  
 ## Key Design Decision
 
 Reinforcement Learning is used for:
 
-Question strategy optimization — not final classification.
+> Question strategy optimization — not final classification.
 
 Because expertise is revealed through interaction, not single answers.
 
