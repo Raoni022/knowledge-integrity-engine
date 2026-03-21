@@ -69,8 +69,8 @@ Each step encodes:
 
 ## Fraud Score (Key Signal)
 
-```
-python
+```md
+```python
 fraud_score = (
     0.30 * profile_delta
     + 0.25 * genericity
@@ -98,15 +98,16 @@ It decides how to investigate them.
 
 ## Available Actions
  
-  - Ask deeper questions:
-   - RAG systems
-   - Infrastructure
-   - Automation workflows
- - Investigate signals:
-   - Profile consistency
-   - External validation (web signals)
+- Ask deeper questions:
+  - RAG systems
+  - Infrastructure
+  - Automation workflows
+- Investigate signals:
+  - Profile consistency
+  - External validation (web signals)
     
 ## Final Decisions
+
  * FLAG → high-confidence fraud
  * PASS → high-confidence legitimate
  * ESCALATE → ambiguous case
