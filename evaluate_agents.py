@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import json
 from collections import Counter
 from pathlib import Path
+from typing import Any
 
 import torch
 
@@ -15,7 +18,7 @@ ARTIFACTS_DIR.mkdir(exist_ok=True)
 BASE_SEED = 42
 
 
-def build_agent(mode: str, state_dim: int, action_dim: int):
+def build_agent(mode: str, state_dim: int, action_dim: int) -> Any:
     if mode == "heuristic":
         return HeuristicAgent()
 
@@ -31,13 +34,13 @@ def build_agent(mode: str, state_dim: int, action_dim: int):
     raise ValueError(f"Unsupported mode: {mode}")
 
 
-def choose_action(agent, mode: str, state):
+def choose_action(agent: Any, mode: str, state) -> int:
     if mode == "dqn":
         return agent.act(state, greedy=True)
     return agent.act(state)
 
 
-def evaluate(mode: str, episodes: int = 200):
+def evaluate(mode: str, episodes: int = 200) -> dict[str, Any]:
     env = KnowledgeIntegrityEnv(max_steps=5)
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.n
@@ -132,7 +135,7 @@ def evaluate(mode: str, episodes: int = 200):
     return results
 
 
-def main():
+def main() -> None:
     heuristic = evaluate("heuristic", episodes=300)
     dqn = evaluate("dqn", episodes=300)
 
