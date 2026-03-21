@@ -2,312 +2,361 @@
   "heuristic": {
     "mode": "heuristic",
     "episodes": 300,
-    "avg_reward": 1.8316,
-    "legit_pass_rate": 0.4466,
+    "base_seed": 42,
+    "avg_reward": 1.8692,
+    "avg_steps_to_decision": 3.0,
+    "legit_pass_rate": 0.4712,
     "fraud_flag_rate": 1.0,
     "gray_investigate_rate": 1.0,
+    "false_pass_fraud_rate": 0.0,
+    "false_flag_legit_rate": 0.0,
+    "legit_escalate_rate": 0.5288,
     "decision_counts": {
-      "fraud->FLAG": 89,
-      "gray->ESCALATE": 108,
-      "legit->ESCALATE": 57,
-      "legit->PASS": 46
+      "fraud->FLAG": 99,
+      "gray->ESCALATE": 97,
+      "legit->ESCALATE": 55,
+      "legit->PASS": 49
     },
     "sample_outcomes": [
       {
-        "candidate": "Joao Ferreira",
-        "label": "gray",
-        "decision": "ESCALATE",
-        "avg_score": 0.1761000007390976,
-        "reward": 1.9294
+        "candidate": "Alice Chen",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6660500168800354,
+        "reward": 2.614,
+        "steps": 3
       },
       {
-        "candidate": "Priya Nair",
+        "candidate": "Daniel Souza",
         "label": "legit",
-        "decision": "PASS",
-        "avg_score": 0.0,
-        "reward": 2.04
-      },
-      {
-        "candidate": "Joao Ferreira",
-        "label": "gray",
         "decision": "ESCALATE",
-        "avg_score": 0.1761000007390976,
-        "reward": 1.9294
+        "avg_score": 0.0848499983549118,
+        "reward": 0.1129,
+        "steps": 3
       },
       {
         "candidate": "Sarah Kim",
         "label": "gray",
         "decision": "ESCALATE",
         "avg_score": 0.22294999659061432,
-        "reward": 2.0133
-      },
-      {
-        "candidate": "Sarah Kim",
-        "label": "gray",
-        "decision": "ESCALATE",
-        "avg_score": 0.22294999659061432,
-        "reward": 2.0133
-      },
-      {
-        "candidate": "Sarah Kim",
-        "label": "gray",
-        "decision": "ESCALATE",
-        "avg_score": 0.22294999659061432,
-        "reward": 2.0133
-      },
-      {
-        "candidate": "Priya Nair",
-        "label": "legit",
-        "decision": "PASS",
-        "avg_score": 0.0,
-        "reward": 2.04
+        "reward": 2.0133,
+        "steps": 3
       },
       {
         "candidate": "Joao Ferreira",
         "label": "gray",
         "decision": "ESCALATE",
         "avg_score": 0.1761000007390976,
-        "reward": 1.9294
+        "reward": 1.9294,
+        "steps": 3
       },
       {
-        "candidate": "Sarah Kim",
-        "label": "gray",
-        "decision": "ESCALATE",
-        "avg_score": 0.22294999659061432,
-        "reward": 2.0133
-      },
-      {
-        "candidate": "Priya Nair",
+        "candidate": "Daniel Souza",
         "label": "legit",
-        "decision": "PASS",
-        "avg_score": 0.0,
-        "reward": 2.04
-      },
-      {
-        "candidate": "Sarah Kim",
-        "label": "gray",
         "decision": "ESCALATE",
-        "avg_score": 0.22294999659061432,
-        "reward": 2.0133
+        "avg_score": 0.0848499983549118,
+        "reward": 0.1129,
+        "steps": 3
       },
       {
         "candidate": "Alice Chen",
         "label": "fraud",
         "decision": "FLAG",
         "avg_score": 0.6660500168800354,
-        "reward": 2.614
-      },
-      {
-        "candidate": "Daniel Souza",
-        "label": "legit",
-        "decision": "ESCALATE",
-        "avg_score": 0.0848499983549118,
-        "reward": 0.1129
-      },
-      {
-        "candidate": "Joao Ferreira",
-        "label": "gray",
-        "decision": "ESCALATE",
-        "avg_score": 0.1761000007390976,
-        "reward": 1.9294
+        "reward": 2.614,
+        "steps": 3
       },
       {
         "candidate": "Alice Chen",
         "label": "fraud",
         "decision": "FLAG",
         "avg_score": 0.6660500168800354,
-        "reward": 2.614
+        "reward": 2.614,
+        "steps": 3
       },
       {
-        "candidate": "Joao Ferreira",
-        "label": "gray",
-        "decision": "ESCALATE",
-        "avg_score": 0.1761000007390976,
-        "reward": 1.9294
-      },
-      {
-        "candidate": "Daniel Souza",
-        "label": "legit",
-        "decision": "ESCALATE",
-        "avg_score": 0.0848499983549118,
-        "reward": 0.1129
+        "candidate": "Alice Chen",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6660500168800354,
+        "reward": 2.614,
+        "steps": 3
       },
       {
         "candidate": "Sarah Kim",
         "label": "gray",
         "decision": "ESCALATE",
         "avg_score": 0.22294999659061432,
-        "reward": 2.0133
+        "reward": 2.0133,
+        "steps": 3
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.04,
+        "steps": 3
       },
       {
         "candidate": "Joao Ferreira",
         "label": "gray",
         "decision": "ESCALATE",
         "avg_score": 0.1761000007390976,
-        "reward": 1.9294
+        "reward": 1.9294,
+        "steps": 3
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.22294999659061432,
+        "reward": 2.0133,
+        "steps": 3
+      },
+      {
+        "candidate": "Marcus Webb",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6243500113487244,
+        "reward": 2.705,
+        "steps": 3
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.1761000007390976,
+        "reward": 1.9294,
+        "steps": 3
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.04,
+        "steps": 3
+      },
+      {
+        "candidate": "Alice Chen",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6660500168800354,
+        "reward": 2.614,
+        "steps": 3
       },
       {
         "candidate": "Daniel Souza",
         "label": "legit",
         "decision": "ESCALATE",
         "avg_score": 0.0848499983549118,
-        "reward": 0.1129
+        "reward": 0.1129,
+        "steps": 3
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.22294999659061432,
+        "reward": 2.0133,
+        "steps": 3
+      },
+      {
+        "candidate": "Marcus Webb",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6243500113487244,
+        "reward": 2.705,
+        "steps": 3
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.04,
+        "steps": 3
       }
     ]
   },
   "dqn": {
     "mode": "dqn",
     "episodes": 300,
-    "avg_reward": 2.2748,
+    "base_seed": 42,
+    "avg_reward": 2.5036,
+    "avg_steps_to_decision": 4.14,
     "legit_pass_rate": 1.0,
     "fraud_flag_rate": 1.0,
     "gray_investigate_rate": 1.0,
+    "false_pass_fraud_rate": 0.0,
+    "false_flag_legit_rate": 0.0,
+    "legit_escalate_rate": 0.0,
     "decision_counts": {
-      "fraud->FLAG": 89,
-      "gray->ASK_DEEP_RAG": 54,
-      "gray->CHECK_WEB": 54,
-      "legit->PASS": 103
+      "fraud->FLAG": 99,
+      "gray->ESCALATE": 97,
+      "legit->PASS": 104
     },
     "sample_outcomes": [
       {
-        "candidate": "Joao Ferreira",
-        "label": "gray",
-        "decision": "ASK_DEEP_RAG",
-        "avg_score": 0.16110000014305115,
-        "reward": 1.7881
+        "candidate": "Alice Chen",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6660500168800354,
+        "reward": 2.921,
+        "steps": 4
       },
       {
-        "candidate": "Priya Nair",
+        "candidate": "Daniel Souza",
         "label": "legit",
         "decision": "PASS",
-        "avg_score": 0.0,
-        "reward": 2.04
-      },
-      {
-        "candidate": "Joao Ferreira",
-        "label": "gray",
-        "decision": "ASK_DEEP_RAG",
-        "avg_score": 0.16110000014305115,
-        "reward": 1.7881
+        "avg_score": 0.0848499983549118,
+        "reward": 2.1129,
+        "steps": 3
       },
       {
         "candidate": "Sarah Kim",
         "label": "gray",
-        "decision": "CHECK_WEB",
+        "decision": "ESCALATE",
         "avg_score": 0.24295000731945038,
-        "reward": 1.9825
-      },
-      {
-        "candidate": "Sarah Kim",
-        "label": "gray",
-        "decision": "CHECK_WEB",
-        "avg_score": 0.24295000731945038,
-        "reward": 1.9825
-      },
-      {
-        "candidate": "Sarah Kim",
-        "label": "gray",
-        "decision": "CHECK_WEB",
-        "avg_score": 0.24295000731945038,
-        "reward": 1.9825
-      },
-      {
-        "candidate": "Priya Nair",
-        "label": "legit",
-        "decision": "PASS",
-        "avg_score": 0.0,
-        "reward": 2.04
+        "reward": 2.4864,
+        "steps": 5
       },
       {
         "candidate": "Joao Ferreira",
         "label": "gray",
-        "decision": "ASK_DEEP_RAG",
+        "decision": "ESCALATE",
         "avg_score": 0.16110000014305115,
-        "reward": 1.7881
+        "reward": 2.3373,
+        "steps": 5
       },
       {
-        "candidate": "Sarah Kim",
-        "label": "gray",
-        "decision": "CHECK_WEB",
-        "avg_score": 0.24295000731945038,
-        "reward": 1.9825
-      },
-      {
-        "candidate": "Priya Nair",
+        "candidate": "Daniel Souza",
         "label": "legit",
         "decision": "PASS",
-        "avg_score": 0.0,
-        "reward": 2.04
-      },
-      {
-        "candidate": "Sarah Kim",
-        "label": "gray",
-        "decision": "CHECK_WEB",
-        "avg_score": 0.24295000731945038,
-        "reward": 1.9825
+        "avg_score": 0.0848499983549118,
+        "reward": 2.1129,
+        "steps": 3
       },
       {
         "candidate": "Alice Chen",
         "label": "fraud",
         "decision": "FLAG",
         "avg_score": 0.6660500168800354,
-        "reward": 2.921
-      },
-      {
-        "candidate": "Daniel Souza",
-        "label": "legit",
-        "decision": "PASS",
-        "avg_score": 0.0848499983549118,
-        "reward": 2.1129
-      },
-      {
-        "candidate": "Joao Ferreira",
-        "label": "gray",
-        "decision": "ASK_DEEP_RAG",
-        "avg_score": 0.16110000014305115,
-        "reward": 1.7881
+        "reward": 2.921,
+        "steps": 4
       },
       {
         "candidate": "Alice Chen",
         "label": "fraud",
         "decision": "FLAG",
         "avg_score": 0.6660500168800354,
-        "reward": 2.921
+        "reward": 2.921,
+        "steps": 4
       },
       {
-        "candidate": "Joao Ferreira",
-        "label": "gray",
-        "decision": "ASK_DEEP_RAG",
-        "avg_score": 0.16110000014305115,
-        "reward": 1.7881
-      },
-      {
-        "candidate": "Daniel Souza",
-        "label": "legit",
-        "decision": "PASS",
-        "avg_score": 0.0848499983549118,
-        "reward": 2.1129
+        "candidate": "Alice Chen",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6660500168800354,
+        "reward": 2.921,
+        "steps": 4
       },
       {
         "candidate": "Sarah Kim",
         "label": "gray",
-        "decision": "CHECK_WEB",
+        "decision": "ESCALATE",
         "avg_score": 0.24295000731945038,
-        "reward": 1.9825
+        "reward": 2.4864,
+        "steps": 5
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.16,
+        "steps": 4
       },
       {
         "candidate": "Joao Ferreira",
         "label": "gray",
-        "decision": "ASK_DEEP_RAG",
+        "decision": "ESCALATE",
         "avg_score": 0.16110000014305115,
-        "reward": 1.7881
+        "reward": 2.3373,
+        "steps": 5
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.24295000731945038,
+        "reward": 2.4864,
+        "steps": 5
+      },
+      {
+        "candidate": "Marcus Webb",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.37435001134872437,
+        "reward": 3.0354,
+        "steps": 4
+      },
+      {
+        "candidate": "Joao Ferreira",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.16110000014305115,
+        "reward": 2.3373,
+        "steps": 5
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.16,
+        "steps": 4
+      },
+      {
+        "candidate": "Alice Chen",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.6660500168800354,
+        "reward": 2.921,
+        "steps": 4
       },
       {
         "candidate": "Daniel Souza",
         "label": "legit",
         "decision": "PASS",
         "avg_score": 0.0848499983549118,
-        "reward": 2.1129
+        "reward": 2.1129,
+        "steps": 3
+      },
+      {
+        "candidate": "Sarah Kim",
+        "label": "gray",
+        "decision": "ESCALATE",
+        "avg_score": 0.24295000731945038,
+        "reward": 2.4864,
+        "steps": 5
+      },
+      {
+        "candidate": "Marcus Webb",
+        "label": "fraud",
+        "decision": "FLAG",
+        "avg_score": 0.37435001134872437,
+        "reward": 3.0354,
+        "steps": 4
+      },
+      {
+        "candidate": "Priya Nair",
+        "label": "legit",
+        "decision": "PASS",
+        "avg_score": 0.0,
+        "reward": 2.16,
+        "steps": 4
       }
     ]
   }
