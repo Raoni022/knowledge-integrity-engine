@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import random
 from collections import deque
@@ -31,27 +31,26 @@ class ReplayBuffer:
 
 
 class HeuristicAgent:
-    """A lightweight baseline agent.
-
-    This is not a full neural DQN yet. It provides a defensible baseline policy so the
-    repository is runnable immediately, while keeping the RL environment ready for a
-    PyTorch-backed DQN extension.
-    """
+    """Stronger baseline policy over a fraud-oriented score."""
 
     def act(self, state: np.ndarray) -> int:
-        profile_delta, scar, genericity, consistency, web_score, _, avg, q_ratio, _, uncertainty = state
+        profile_delta, scar, genericity, consistency, web_score, volatility, fraud_score, q_ratio, _, uncertainty = state
 
         if q_ratio < 0.4:
             if profile_delta > 0.65:
                 return 6  # CHECK_PROFILE
-            if web_score > 0.6:
+            if web_score > 0.60:
                 return 7  # CHECK_WEB
-            if scar < 0.25:
+            if genericity > 0.55 and scar < 0.25:
                 return 1  # ASK_DEEP_RAG
+            if consistency < 0.30:
+                return 5  # ASK_DEEP_AUTOMATION
             return 3  # ASK_DEEP_INFRA
 
-        if avg > 0.72 and uncertainty < 0.45:
+        if fraud_score > 0.60 and uncertainty < 0.60:
             return 9  # FLAG
-        if avg < 0.38 and consistency > 0.45 and genericity < 0.45:
+
+        if fraud_score < 0.32 and consistency > 0.35 and scar > 0.20 and genericity < 0.55:
             return 8  # PASS
+
         return 10  # ESCALATE

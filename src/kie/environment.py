@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -31,7 +31,7 @@ class KnowledgeIntegrityEnv(gym.Env):
 
         self.current_candidate: dict[str, Any] | None = None
         self.steps = 0
-        self.prev_avg = 0.0
+        self.prev_score = 0.0
         self.last_action_norm = 0.0
 
     def _pick_candidate(self, seed: int | None = None) -> dict[str, Any]:
@@ -51,37 +51,51 @@ class KnowledgeIntegrityEnv(gym.Env):
         profile = self.current_candidate["profile_claims"]
         text = self._topic_text()
 
-        p_score = profile_delta_score(profile)
-        s_score = scar_score(text)
-        g_score = genericity_score(text)
-        c_score = consistency_score(profile["tools"], text, profile["years_experience"])
-        w_score = web_signals_score(profile["web_signals"])
-        avg_score = (p_score + (1 - g_score) + c_score + (1 - w_score) + s_score) / 5.0
-        volatility = abs(s_score - c_score)
-        uncertainty = 1.0 - abs(avg_score - 0.5) * 2.0
-        question_ratio = min(self.steps / self.max_steps, 1.0)
-        info = info_gain(self.prev_avg, avg_score)
+        p_score = profile_delta_score(profile)               # higher = more suspicious
+        s_score = scar_score(text)                           # higher = more credible
+        g_score = genericity_score(text)                     # higher = more suspicious
+        c_score = consistency_score(profile["tools"], text, profile["years_experience"])  # higher = more credible
+        w_score = web_signals_score(profile["web_signals"])  # higher = more suspicious
 
-        state = np.array([
-            p_score,
-            s_score,
-            g_score,
-            c_score,
-            w_score,
-            volatility,
-            avg_score,
-            question_ratio,
-            self.last_action_norm,
-            uncertainty * (0.7 + 0.3 * info),
-        ], dtype=np.float32)
-        self.prev_avg = avg_score
+        volatility = abs(s_score - c_score)
+
+        fraud_score = (
+            0.30 * p_score
+            + 0.25 * g_score
+            + 0.20 * w_score
+            + 0.10 * volatility
+            - 0.10 * s_score
+            - 0.15 * c_score
+        )
+        fraud_score = max(0.0, min(1.0, fraud_score))
+
+        uncertainty = 1.0 - abs(fraud_score - 0.5) * 2.0
+        question_ratio = min(self.steps / self.max_steps, 1.0)
+        gain = info_gain(self.prev_score, fraud_score)
+
+        state = np.array(
+            [
+                p_score,
+                s_score,
+                g_score,
+                c_score,
+                w_score,
+                volatility,
+                fraud_score,
+                question_ratio,
+                self.last_action_norm,
+                uncertainty * (0.7 + 0.3 * gain),
+            ],
+            dtype=np.float32,
+        )
+        self.prev_score = fraud_score
         return state
 
     def reset(self, *, seed: int | None = None, options: dict | None = None):
         super().reset(seed=seed)
         self.current_candidate = self._pick_candidate(seed)
         self.steps = 0
-        self.prev_avg = 0.0
+        self.prev_score = 0.0
         self.last_action_norm = 0.0
         state = self._build_state()
         return state, {"candidate": self.current_candidate["name"], "label": self.current_candidate["label"]}
@@ -91,15 +105,15 @@ class KnowledgeIntegrityEnv(gym.Env):
         self.steps += 1
         self.last_action_norm = action / max(len(ACTIONS) - 1, 1)
         state = self._build_state()
-        avg_score = float(state[6])
+        fraud_score = float(state[6])
         label = self.current_candidate["label"]
 
         reward = 0.0
         terminated = False
 
         if action_name.startswith("ASK") or action_name in {"CHECK_PROFILE", "CHECK_WEB"}:
-            reward += 0.15 + 0.35 * float(state[9])
-            reward -= 0.05 * float(state[2])
+            reward += 0.12 + 0.40 * float(state[9])
+            reward -= 0.03 * max(0.0, self.steps - 3)
         elif action_name == "FLAG":
             terminated = True
             if label == "fraud":
@@ -128,12 +142,13 @@ class KnowledgeIntegrityEnv(gym.Env):
             if label == "gray":
                 reward += 0.8
             else:
-                reward -= 0.5 * abs(avg_score - (0.75 if label == "fraud" else 0.25))
+                target = 0.75 if label == "fraud" else 0.25
+                reward -= 0.5 * abs(fraud_score - target)
 
         info = {
             "candidate": self.current_candidate["name"],
             "label": label,
             "action_name": action_name,
-            "avg_score": avg_score,
+            "avg_score": fraud_score,
         }
         return state, reward, terminated, False, info
