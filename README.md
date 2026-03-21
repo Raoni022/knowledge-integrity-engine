@@ -1,75 +1,206 @@
 # Knowledge Integrity & Expert Verification Engine
 
+A reinforcement learning proof of concept for detecting **expertise inflation** in technical candidate screening.
+
 ## Overview
 
-Traditional hiring assumes that correct answers imply real expertise.
+Traditional hiring often assumes that correct answers imply real expertise.
 
-That assumption no longer holds.
+That assumption is weaker now.
 
-With modern LLMs, candidates can generate convincing answers and polished profiles without having actually operated systems in production. The failure mode is subtle: not incorrect answers, but **lack of depth disguised as competence**.
+With modern LLMs, candidates can generate polished answers and credible-looking profiles without having operated real systems in production. The failure mode is often not factual incorrectness, but **surface-level correctness without operational depth**.
 
-This project addresses a new class of fraud:
+This project explores a different framing for that problem:
 
-> Not identity fraud — but **expertise inflation**.
+> instead of asking only whether a candidate looks suspicious, ask what the **best next investigative action** is to reduce uncertainty.
+
+The result is a simplified environment where an agent learns when to:
+
+- pass a candidate
+- flag a candidate
+- escalate to manual review
+- investigate further through deeper technical probing or web validation
 
 ---
 
 ## Core Thesis
 
-The difference between a real expert and an LLM-assisted candidate is not correctness.
+Correctness alone is no longer a reliable proxy for experience.
 
-It is the **depth gradient of their reasoning**.
+In practice, stronger candidates tend to expose:
 
-Real experts:
+- constraints
+- trade-offs
+- failure modes
+- debugging paths
+- operational details
 
-- reference constraints, trade-offs, and failure modes
-- expose system-level thinking such as latency, scaling, and edge cases
-- remain consistent under deeper probing
+more consistently under deeper questioning.
 
-LLM-assisted candidates:
+By contrast, LLM-assisted or overstated expertise often appears as:
 
-- produce structurally correct but generic answers
-- lack operational detail
-- collapse when pushed beyond surface-level explanations
+- polished but generic answers
+- weak linkage between claims and examples
+- inconsistent depth across related topics
+- poor external evidence relative to claimed experience
 
-This system is designed to capture that difference.
-
----
-
-## Problem Framing
-
-We model candidate evaluation as a **sequential decision process**, not a static classification task.
-
-Instead of asking:
-
-> "Is this candidate good or bad?"
-
-We ask:
-
-> "What is the most informative next action to reduce uncertainty?"
-
-This framing is closer to how strong interviewers and hiring panels actually work in practice.
+This project models that process as a **sequential decision problem**.
 
 ---
 
-## System Architecture
+## Why Reinforcement Learning?
 
-### State Representation
+A static classifier can score a candidate as suspicious or not suspicious.
 
-Each environment step encodes a fixed-size feature vector built from signals such as:
+But real interview workflows are sequential. A strong interviewer does not only classify — they decide what to do next:
 
-- **Profile Delta** — sudden skill inflation over time
-- **Scar Score** — evidence of real-world operational detail
-- **Genericity Score** — LLM-like phrasing patterns
-- **Consistency Score** — alignment between profile and answers
-- **Web Signals Score** — external validation proxy
-- **Volatility** — disagreement between signals
-- **Fraud Score** — aggregated suspicion signal
-- **Question Ratio** — how deep the interaction has gone
-- **Last Action Encoding**
-- **Uncertainty** — confidence of the current estimate
+- ask a deeper question
+- verify externally
+- escalate ambiguity
+- stop early when confidence is high
 
-### Fraud Score
+That makes RL a reasonable fit for the proof of concept.
+
+The goal here is not to claim that RL is the only valid approach.  
+The goal is to show that **candidate verification can be framed as a policy problem**, not only a binary classification problem.
+
+---
+
+## Environment Design
+
+The repository includes a custom Gymnasium environment:
+
+- `KnowledgeIntegrityEnv`
+
+Each episode simulates the evaluation of one synthetic candidate.
+
+### Candidate Labels
+
+The synthetic environment uses three classes:
+
+- `legit`
+- `fraud`
+- `gray`
+
+These labels act as the controlled ground truth for the prototype.
+
+### Observation Space
+
+The environment encodes each step as a fixed-size feature vector with 10 values:
+
+1. **Profile Delta** — suspicious career inflation over time
+2. **Scar Score** — evidence of operational detail
+3. **Genericity Score** — broad, polished, low-specificity phrasing
+4. **Consistency Score** — alignment between profile claims and answers
+5. **Web Signals Score** — contradiction between claims and public evidence
+6. **Volatility** — disagreement between signals
+7. **Fraud Score** — aggregated suspicion score
+8. **Question Ratio** — how far the interaction has progressed
+9. **Last Action Encoding** — normalized representation of prior action
+10. **Uncertainty** — confidence-adjusted ambiguity estimate
+
+### Action Space
+
+The agent can choose among:
+
+- `ASK_BROAD_RAG`
+- `ASK_DEEP_RAG`
+- `ASK_BROAD_INFRA`
+- `ASK_DEEP_INFRA`
+- `ASK_BROAD_AUTOMATION`
+- `ASK_DEEP_AUTOMATION`
+- `CHECK_PROFILE`
+- `CHECK_WEB`
+- `PASS`
+- `FLAG`
+- `ESCALATE`
+
+The core idea is that the system does not immediately jump to a final label.  
+It can investigate first.
+
+---
+
+## Reward Design
+
+The reward function is designed around three goals:
+
+1. correctly identify strong fraud indicators
+2. avoid unnecessary false positives on legitimate candidates
+3. encourage useful intermediate investigation before final decisions
+
+### Intuition
+
+- Investigative actions such as `ASK_*`, `CHECK_PROFILE`, and `CHECK_WEB` receive positive reward when uncertainty is high
+- `FLAG` is strongly rewarded for fraud and penalized for legit candidates
+- `PASS` is rewarded for legit candidates and penalized for fraud
+- `ESCALATE` is treated as a useful fallback for ambiguous gray-zone profiles
+- long investigations are mildly penalized to avoid wasteful policies
+
+This makes the policy trade off:
+
+- decision quality
+- uncertainty reduction
+- manual review burden
+- investigation cost
+
+---
+
+## Feature Engineering
+
+The prototype focuses on a small set of interpretable signals rather than a large set of noisy features.
+
+### Included Signals
+
+**Profile Delta**
+- timeline anomalies
+- title inflation
+- compressed experience progression
+
+**Operational "Scar" Signals**
+- mentions of concrete implementation details such as:
+  - chunking
+  - reranking
+  - latency
+  - retries
+  - race conditions
+  - idempotency
+  - queues
+  - rollback
+
+**Genericity Signals**
+- polished but low-information language such as:
+  - "best practices"
+  - "robust"
+  - "scalable"
+  - "high quality"
+  - "operational excellence"
+
+**Consistency Signals**
+- overlap between claimed tools and response content
+- alignment between claimed experience and operational depth
+
+**Web Signals**
+- mocked proxies for:
+  - GitHub activity
+  - public presence
+  - temporal coherence of external evidence
+
+### Design Choice
+
+This first version intentionally uses **interpretable and partially hand-crafted features**.
+
+That is a limitation, but also a deliberate trade-off:
+- easier to debug
+- easier to explain
+- better for validating the policy framing early
+
+A more advanced version would move toward semantic consistency models and richer evidence graphs.
+
+---
+
+## Fraud Score
+
+The environment builds an aggregate suspicion score:
 
 ```python
 fraud_score = (
@@ -84,100 +215,60 @@ fraud_score = (
 
 ### Interpretation
 
-- **High score** → stronger indicators of fabricated expertise
-- **Low score** → stronger consistency with real-world experience
+- **Higher score** -> stronger fraud indicators
+- **Lower score** -> stronger evidence of legitimate expertise
 
-This helps avoid signal cancellation by explicitly separating suspicion signals from credibility signals.
-
----
-
-## Action Space
-
-The system does not immediately classify candidates.
-
-It decides **how to investigate them**.
-
-### Available Actions
-
-- `PASS`
-- `FLAG`
-- `ESCALATE`
-- `CHECK_WEB`
-- `ASK_DEEP_RAG`
-
-### Design Principle
-
-Reinforcement Learning is used for:
-
-> **Question and investigation strategy optimization — not final classification alone**
-
-This is important because expertise is revealed through interaction, not through a single response.
+This is not intended as a production fraud score.  
+It is an interpretable internal signal for the RL environment.
 
 ---
 
-## Current Implementation
+## Agent Design
 
-This repository includes:
+The repository contains two agents:
 
-- a custom Gymnasium environment
-- a heuristic baseline agent
-- a trained DQN policy
-- a synthetic dataset with `fraud`, `legit`, and `gray` cases
-- a side-by-side demo comparing baseline vs trained DQN
-- an evaluation script for repeated seeded runs
-- saved evaluation and training metrics
-- unit tests for scoring-related components
+### 1. Heuristic Baseline
+A rules-based policy that:
+- investigates early when evidence is mixed
+- flags strong fraud-like patterns
+- passes strong legit-like patterns
+- escalates remaining ambiguity
 
----
+### 2. Trained DQN Agent
+A Deep Q-Network trained to optimize reward over repeated episodes.
 
-## Results
-
-Controlled evaluation over **300 episodes** shows that the trained DQN improves policy quality while preserving fraud coverage.
-
-### Heuristic Baseline
-
-- **Average reward:** `1.8316`
-- **Legit pass rate:** `0.4466`
-- **Fraud flag rate:** `1.0`
-- **Gray investigate rate:** `1.0`
-
-### Trained DQN
-
-- **Average reward:** `2.2748`
-- **Legit pass rate:** `1.0`
-- **Fraud flag rate:** `1.0`
-- **Gray investigate rate:** `1.0`
-
-### Key Insight
-
-The trained DQN:
-
-- preserves fraud detection performance
-- preserves investigation coverage for gray-zone profiles
-- reduces false-positive escalation on legitimate candidates
-- replaces generic escalation with more targeted next-step actions such as:
-  - `CHECK_WEB`
-  - `ASK_DEEP_RAG`
-
-In other words, the learned policy is not only identifying suspicious patterns — it is learning **how to investigate them more efficiently**.
+The DQN is not presented as a magical fraud detector.  
+Its role is to learn whether a more adaptive policy can outperform a fixed heuristic on the same environment.
 
 ---
 
-## Demo Behavior
+## Evaluation
 
-A typical outcome pattern looks like this:
+The evaluation compares the heuristic baseline and the trained DQN over repeated seeded episodes.
 
-```text
-fraud -> FLAG
-gray  -> CHECK_WEB / ASK_DEEP_RAG
-legit -> PASS
-```
+### Reported Metrics
 
-The heuristic baseline tends to route many ambiguous cases to a generic `ESCALATE` action, while the DQN chooses more specific next investigative actions.
+The evaluation script reports:
+
+- average reward
+- average steps to decision
+- legit pass rate
+- fraud flag rate
+- gray investigate rate
+- false pass rate for fraud
+- false flag rate for legit
+- legit escalate rate
+- decision counts by label
+
+This is more useful than reward alone because the real trade-offs are:
+
+- catching fraud
+- not harming legitimate candidates
+- not overloading manual review
 
 ---
 
-## Repository Structure
+## Current Repository Structure
 
 ```text
 src/kie/
@@ -189,15 +280,19 @@ src/kie/
   web_signals.py
   question_bank.py
   simulator.py
+  data/
+    synthetic_candidates.json
 
 artifacts/
   training_metrics.json
   eval_results.json
+  dqn_q_net.pth
+  dqn_target_net.pth
 
-tests/
 run_demo.py
 train_dqn.py
 evaluate_agents.py
+requirements.txt
 README.md
 ```
 
@@ -222,20 +317,20 @@ This generates:
 - `artifacts/training_metrics.json`
 - `artifacts/dqn_q_net.pth`
 - `artifacts/dqn_target_net.pth`
+- `artifacts/training_curve.png` if matplotlib is available
 
-### 3. Run the demo
+### 3. Run the side-by-side demo
 
 ```bash
 python run_demo.py
 ```
 
-This prints:
-
-- heuristic baseline decisions
+This shows:
+- heuristic decisions
 - trained DQN decisions
-- short natural-language explanations for each action
+- short natural-language explanations
 
-### 4. Run the evaluation
+### 4. Run the full evaluation
 
 ```bash
 python evaluate_agents.py
@@ -253,49 +348,145 @@ pytest -q
 
 ---
 
-## Practical Interpretation
+## Reproducibility
 
-This prototype demonstrates that candidate verification can be framed as a **policy problem** rather than only a classification problem.
+This repository uses:
 
-That distinction matters.
+- a single canonical environment: `KnowledgeIntegrityEnv`
+- fixed seeds in training and evaluation
+- synthetic candidate data under `src/kie/data`
 
-A good verification engine should not only estimate whether someone is suspicious. It should also decide what the **best next investigative move** is:
+To reproduce the main artifacts:
 
-- validate external evidence
-- probe deeper on technical depth
-- escalate only when necessary
-- pass when evidence is internally consistent
+```bash
+python train_dqn.py
+python evaluate_agents.py
+```
 
-That makes the system more aligned with real hiring workflows and more interpretable than a single black-box fraud score.
+---
+
+## Demo Interpretation
+
+A common behavior pattern is:
+
+```text
+fraud -> FLAG
+gray  -> CHECK_WEB / ASK_DEEP_RAG / ESCALATE
+legit -> PASS
+```
+
+The baseline tends to use more generic escalation.
+
+The trained policy can learn more targeted intermediate actions before reaching a final decision.
+
+That is the main point of the prototype.
+
+---
+
+## Ground Truth
+
+For this proof of concept, ground truth is synthetic and controlled.
+
+That is acceptable for a coding exercise, but obviously weaker than real deployment data.
+
+In a more realistic system, ground truth would likely need to combine:
+
+- expert adjudication
+- disagreement-aware labeling
+- paired interview outcomes
+- delayed validation from technical assessments
+- weak supervision from external evidence
+
+This repository does **not** solve that problem fully.  
+It only demonstrates the policy-learning framing in a controlled setup.
 
 ---
 
 ## Limitations
 
-This is still a controlled prototype.
+This project is intentionally simplified.
 
 Current limitations include:
 
 - synthetic candidate data
-- simulated web signals
-- a simplified and fixed action/state interface
-- evaluation in a controlled environment rather than a production hiring pipeline
+- hand-crafted feature logic
+- mocked web evidence
+- small state space
+- no true semantic reasoning model
+- no train/eval split across richer adversarial distributions
+- no live interview multimodal signals yet
 
 So the correct interpretation is:
 
-> this project demonstrates **policy improvement in a controlled expertise-verification environment**, not a production-ready fraud-detection platform.
+> this is a controlled RL proof of concept for adaptive expertise verification, not a production-ready fraud detection system
+
+---
+
+## Bonus Challenge: Multi-Modal Live Extension
+
+A realistic live version could extend the state space with multimodal cues from:
+
+### Visual
+- eye movement patterns
+- repeated off-screen glances
+- reading behavior
+- abnormal hesitation before technical answers
+
+### Audio
+- answer latency
+- pacing shifts
+- prosody disruption
+- abrupt confidence collapse under deeper probing
+
+### Screen
+- tab switching
+- clipboard behavior
+- window focus changes
+- suspicious timing correlations with answer quality
+
+### RL Framing in a Live Setting
+
+In that version, the policy could decide whether to:
+
+- continue current topic
+- deepen the question
+- switch topic
+- request implementation detail
+- trigger silent risk accumulation
+- escalate to live reviewer
+- stop early when evidence is strong
+
+That would turn the agent into a real-time interview strategy layer rather than only an offline evaluator.
+
+---
+
+## Why This Project Is Useful
+
+The main value of this project is not high benchmark performance.
+
+The main value is the modeling choice:
+
+- treat expertise verification as a sequential decision process
+- optimize investigation strategy, not only final classification
+- keep the signal set small and interpretable
+- surface trade-offs between fraud detection, false positives, and review cost
+
+That is the core thesis.
 
 ---
 
 ## Future Work
 
-Potential next steps include:
+Potential next steps:
 
-- expanding the candidate pool with more adversarial and realistic cases
-- integrating richer external validation signals
-- improving feature-level and action-level interpretability
-- validating state and action dimensions directly from the environment
-- testing over broader seeded runs and more realistic screening scenarios
+- add richer synthetic and adversarial candidate profiles
+- improve train/eval separation
+- replace lexical features with semantic consistency features
+- add cross-answer consistency scoring
+- calibrate reward weights more systematically
+- integrate real external evidence sources
+- simulate live multimodal interview signals
+- add model interpretability outputs per action
 
 ---
 
