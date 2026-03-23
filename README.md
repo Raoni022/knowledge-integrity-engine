@@ -490,6 +490,23 @@ Potential next steps:
 
 ---
 
+## Why Not Just Classification?
+
+A classifier can estimate whether a candidate is suspicious.
+
+But it cannot decide:
+- whether more evidence is needed
+- which signal to probe next
+- when to stop early
+- when to escalate safely
+
+This problem is inherently sequential and cost-sensitive.
+
+The goal is not only to predict fraud,
+but to optimize the investigation process under uncertainty.
+
+---
+
 ## Results
 
 The latest evaluation compares the heuristic baseline against the trained DQN policy.
@@ -502,6 +519,14 @@ The latest evaluation compares the heuristic baseline against the trained DQN po
 | Fraud Flag Rate | 1.00 | **1.00** |
 | False Pass Fraud | 0.00 | **0.00** |
 | False Flag Legit | 0.00 | **0.00** |
+
+---
+
+### Where the DQN improves
+
+- Reduces unnecessary escalation of legitimate candidates
+- Performs deeper investigation before flagging gray cases
+- Adapts investigation strategy instead of fixed rules
 
 ---
 
