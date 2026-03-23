@@ -490,6 +490,32 @@ Potential next steps:
 
 ---
 
+## Results
+
+The latest evaluation compares the heuristic baseline against the trained DQN policy.
+
+| Metric | Heuristic | DQN |
+|---|---:|---:|
+| Avg Reward | 1.869 | **2.503** |
+| Avg Steps | **3.0** | 4.14 |
+| Legit Pass Rate | 0.47 | **1.00** |
+| Fraud Flag Rate | 1.00 | **1.00** |
+| False Pass Fraud | 0.00 | **0.00** |
+| False Flag Legit | 0.00 | **0.00** |
+
+---
+
+### Interpretation
+
+- The DQN significantly improves handling of legitimate candidates (100% pass rate)
+- It maintains perfect fraud detection
+- It uses slightly more steps, indicating deeper investigation
+- It reduces unnecessary escalation for legit candidates
+
+This suggests the learned policy improves **decision quality under uncertainty**, not just reward.
+
+---
+
 ## Author
 
 **Raoni Medeiros**  
